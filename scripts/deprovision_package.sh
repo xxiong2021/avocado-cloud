@@ -509,6 +509,18 @@ function verify_cloudinit() {
     exit $rflag
 }
 
+function verify_azure_vm_utils() {
+    rpm -q azure-vm-utils > /dev/null
+    if [ $? -eq 0 ];then
+        format_echo "Verify azure-vm-utils removed: FAIL";
+        ret=1
+    else
+        format_echo "Verify azure-vm-utils removed: PASS"
+        ret=0
+    fi
+    return $ret
+}
+
 case $type in
 cloudinit)
     function deprovision() { deprovision_cloudinit; }
@@ -536,6 +548,7 @@ kernel)
 azure-vm-utils)
 # azure-vm-utils
     function deprovision() { deprovision_azure_vm_utils; }
+    function verify() { verify_azure_vm_utils; }
 ;;
 *)
     echo "$type: unsupported deprovision type! Exit."
