@@ -4,6 +4,7 @@ if [ x$1 != x ];then
     func=$1
 else
     echo "Must specify function: deprovision/verify/all. Exit!"
+    echo "Usage: $0 <function: deprovision|verify|all> <type: cloudinit|cloudinit_wala|wala|kernel|azure-vm-utils> [username]"
     exit 1
 fi
 
@@ -11,6 +12,7 @@ if [ x$2 != x ];then
     type=$2
 else
     echo "Must specify type: cloudinit/cloudinit_wala/wala. Exit!"
+    echo "Usage: $0 <function: deprovision|verify|all> <type: cloudinit|cloudinit_wala|wala|kernel|azure-vm-utils> [username]"
     exit 1
 fi
 
@@ -53,7 +55,7 @@ function deprovision_wala() {
     rm -f /etc/ssh/sshd_config.d/50-cloud-init.conf
 }
 
-function deprovision_azure-vm-utils() {
+function deprovision_azure_vm_utils() {
     rpm -e azure-vm-utils > /dev/null 2>&1    
 }
 
@@ -533,10 +535,11 @@ kernel)
 ;;
 azure-vm-utils)
 # azure-vm-utils
-    function deprovision() { deprovision_azure-vm-utils; }
+    function deprovision() { deprovision_azure_vm_utils; }
 ;;
 *)
     echo "$type: unsupported deprovision type! Exit."
+    echo "Usage: $0 <function: deprovision|verify|all> <type: cloudinit|cloudinit_wala|wala|kernel|azure-vm-utils> [username]"
     exit 1
 ;;
 esac
