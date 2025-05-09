@@ -53,6 +53,10 @@ function deprovision_wala() {
     rm -f /etc/ssh/sshd_config.d/50-cloud-init.conf
 }
 
+function deprovision_azure-vm-utils() {
+    rpm -e azure-vm-utils > /dev/null 2>&1    
+}
+
 function deprovision_cloudinit_wala() {
     systemctl stop waagent
     systemctl enable waagent > /dev/null 2>&1
@@ -526,6 +530,10 @@ kernel)
         function deprovision() { deprovision_wala; }
         function verify() { verify_wala; }
     fi
+;;
+azure-vm-utils)
+# azure-vm-utils
+    function deprovision() { deprovision_azure-vm-utils; }
 ;;
 *)
     echo "$type: unsupported deprovision type! Exit."
