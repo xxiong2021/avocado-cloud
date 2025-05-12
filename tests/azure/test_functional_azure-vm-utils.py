@@ -34,20 +34,18 @@ class Azure_vm_utilsTest(Test):
         account.login()
         self.project = self.params.get("rhel_ver", "*/VM/*")
         self.case_short_name = re.findall(r"Test.(.*)", self.name.name)[0]
-#        if self.case_short_name == "test_cloudinit_verify_customized_file_in_authorizedkeysfile":
-#            self.cancel("BZ#1862967 has not been fixed yet. Skip.")
         self.pwd = os.path.abspath(os.path.dirname(__file__))
+        
+        # Skip tests based on RHEL version
         if LooseVersion(self.project) < LooseVersion('9.7.0'):
-              self.cancel(
-                  "Skip case because RHEL-{} doesn't support this feature".format(self.project)
-              )
+            self.cancel(f"Skip case because RHEL-{self.project} doesn't support this feature")
         if LooseVersion(self.project) < LooseVersion('10.1'):
-              self.cancel(
-                  "Skip case because RHEL-{} doesn't support this feature".format(self.project)
-              )
-        publicip = AzurePublicIP(self.params, name=self.vm.vm_name )
+            self.cancel(f"Skip case because RHEL-{self.project} doesn't support this feature")
+        
+        # Initialize public IP and VM details
+        publicip = AzurePublicIP(self.params, name=self.vm.vm_name)
         return
-     
+
     @property
     def _postfix(self):
         from datetime import datetime
@@ -61,16 +59,28 @@ class Azure_vm_utilsTest(Test):
         3. Check the result
         """
         try:
-            command("scp -i /root/.ssh/id_rsa /root/azure-vm-utils/selftest/selftest.py  azureuser@%s:/home/azureuser") \
-                    % (self.vm.public_ip))
-            command("ssh -i ./id_rsa azureuser@%s -- sudo /home/azureuser/selftest.py --skip-imds-validation --skip-symlink-validation > result.txt 2>&1") \
-                    % (self.vm.public_ip))
-            ret = command("tail -n 1 /root/azure-vm-utils/result.txt | awk '{print $NF}'")
-        except:
-            return False
-        if len(ret.stdout):
-            self.log.info("ret.stdout")
-            if ret.stdout = "success!"
+            # Upload the selftest.py to the remote VM
+            upload_command = f"scp -i /root/.ssh/id_rsa /root/azure-vm-utils/selftest/selftest.py azureuser@{self.vm.public_ip}:/home/azureuser"
+            command(upload_command)
+            
+            # Run the selftest.py script on the VM
+            run_command = f"ssh -i ./id_rsa azureuser@{self.vm.public_ip} -- sudo /home/azureuser/selftest.py --skip-imds-validation --skip-symlink-validation > result.txt 2>&1"
+            command(run_command)
+            
+            # Get the last line of the result
+            result_command = "tail -n 1 /root/azure-vm-utils/result.txt | awk '{print $NF}'"
+            ret = command(result_command)
+            
+            # Check if the result was successful
+            if ret.stdout.strip() == "success!":
+                self.log.info("Self-test completed successfully.")
                 return True
-        return False
+            else:
+                self.log.error(f"Self-test failed: {ret.stdout}")
+                return False
+        
+        except Exception as e:
+            self.log.error(f"An error occurred: {str(e)}")
+            return False
+
       
