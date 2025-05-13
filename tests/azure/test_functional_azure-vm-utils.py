@@ -18,14 +18,14 @@ import requests
 from avocado_cloud.utils.utils_azure import command
 
 
-BASEPATH = os.path.abspath(__file__ + "/../../../")
+#BASEPATH = os.path.abspath(__file__ + "/../../../")
 
 
-class D(dict):
-    # Don't raise exception if cannot get key value
-    def __missing__(self, key):
-        self[key] = D()
-        return self[key]
+# class D(dict):
+#     # Don't raise exception if cannot get key value
+#     def __missing__(self, key):
+#         self[key] = D()
+#         return self[key]
 
 
 class Azure_vm_utilsTest(Test):
