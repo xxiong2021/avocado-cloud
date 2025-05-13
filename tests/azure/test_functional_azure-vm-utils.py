@@ -29,24 +29,24 @@ from avocado_cloud.utils.utils_azure import command
 
 
 class Azure_vm_utilsTest(Test):
-    def setUp(self):
-        account = AzureAccount(self.params)
-        account.login()
-        self.project = self.params.get("rhel_ver", "*/VM/*")
-        self.case_short_name = re.findall(r"Test.(.*)", self.name.name)[0]
-        self.pwd = os.path.abspath(os.path.dirname(__file__))
+    # def setUp(self):
+    #     account = AzureAccount(self.params)
+    #     account.login()
+    #     self.project = self.params.get("rhel_ver", "*/VM/*")
+    #     self.case_short_name = re.findall(r"Test.(.*)", self.name.name)[0]
+    #     self.pwd = os.path.abspath(os.path.dirname(__file__))
         
-        # Skip tests based on RHEL version
-        if LooseVersion(self.project) < LooseVersion('9.7.0'):
-            self.cancel(f"Skip case because RHEL-{self.project} doesn't support this feature")
-        if LooseVersion(self.project) < LooseVersion('10.1'):
-            self.cancel(f"Skip case because RHEL-{self.project} doesn't support this feature")
+    #     # Skip tests based on RHEL version
+    #     if LooseVersion(self.project) < LooseVersion('9.7.0'):
+    #         self.cancel(f"Skip case because RHEL-{self.project} doesn't support this feature")
+    #     if LooseVersion(self.project) < LooseVersion('10.1'):
+    #         self.cancel(f"Skip case because RHEL-{self.project} doesn't support this feature")
         
-        # Initialize public IP and VM details
-        publicip = AzurePublicIP(self.params, name=self.vm.vm_name)
-        return
+    #     # Initialize public IP and VM details
+    #     publicip = AzurePublicIP(self.params, name=self.vm.vm_name)
+    #     return
 
-    @property
+    # @property
     def _postfix(self):
         from datetime import datetime
         return datetime.strftime(datetime.now(), "%Y%m%d%H%M%S")
