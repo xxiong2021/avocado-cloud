@@ -59,12 +59,15 @@ class Azure_vm_utilsTest(Test):
         3. Check the result
         """
         try:
+            publicip = AzurePublicIP(self.params, name=self.vm.vm_name)
+            self.log.info("publicip: %s",publicip)
+
             # Upload the selftest.py to the remote VM
-            upload_command = f"scp -i /root/.ssh/id_rsa /root/azure-vm-utils/selftest/selftest.py azureuser@{self.vm.public_ip}:/home/azureuser"
+            upload_command = "scp -i /root/.ssh/id_rsa /root/azure-vm-utils/selftest/selftest.py azureuser@{publicip}:/home/azureuser"
             command(upload_command)
             
             # Run the selftest.py script on the VM
-            run_command = f"ssh -i ./id_rsa azureuser@{self.vm.public_ip} -- sudo /home/azureuser/selftest.py --skip-imds-validation --skip-symlink-validation > result.txt 2>&1"
+            run_command = "ssh -i ./id_rsa azureuser@{publicip} -- sudo /home/azureuser/selftest.py --skip-imds-validation --skip-symlink-validation > result.txt 2>&1"
             command(run_command)
             
             # Get the last line of the result
