@@ -4,18 +4,18 @@ import time
 import yaml
 from avocado import Test
 from avocado import main
-from avocado_cloud.app import Setup
-from avocado_cloud.app.azure import AzureAccount
-from avocado_cloud.app.azure import AzureNIC
-from avocado_cloud.app.azure import AzurePublicIP
-from avocado_cloud.app.azure import AzureNicIpConfig
-from avocado_cloud.app.azure import AzureImage
+# from avocado_cloud.app import Setup
+# from avocado_cloud.app.azure import AzureAccount
+# from avocado_cloud.app.azure import AzureNIC
+# from avocado_cloud.app.azure import AzurePublicIP
+# from avocado_cloud.app.azure import AzureNicIpConfig
+# from avocado_cloud.app.azure import AzureImage
 from distutils.version import LooseVersion
-from avocado_cloud.utils import utils_azure
+# from avocado_cloud.utils import utils_azure
 
 
-import requests
-from avocado_cloud.utils.utils_azure import command
+# import requests
+# from avocado_cloud.utils.utils_azure import command
 
 
 #BASEPATH = os.path.abspath(__file__ + "/../../../")
