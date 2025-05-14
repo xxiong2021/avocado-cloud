@@ -53,7 +53,7 @@ class Azure_vm_utilsTest(Test):
 
     def test_selftest_without_imds_symlink_validation(self):
         """
-        :avocado: tags=tier1
+        :avocado: tags=tier1,azure_vm_utils
         """
         try:
             publicip = AzurePublicIP(self.params, name=self.vm.vm_name)
