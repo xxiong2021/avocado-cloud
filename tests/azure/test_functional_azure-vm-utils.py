@@ -4,21 +4,21 @@ import time
 import yaml
 from avocado import Test
 from avocado import main
-# from avocado_cloud.app import Setup
+from avocado_cloud.app import Setup
 # from avocado_cloud.app.azure import AzureAccount
 # from avocado_cloud.app.azure import AzureNIC
 from avocado_cloud.app.azure import AzurePublicIP
-# from avocado_cloud.app.azure import AzureNicIpConfig
+from avocado_cloud.app.azure import AzureNicIpConfig
 # from avocado_cloud.app.azure import AzureImage
 from distutils.version import LooseVersion
-# from avocado_cloud.utils import utils_azure
+from avocado_cloud.utils import utils_azure
 
 
 # import requests
-# from avocado_cloud.utils.utils_azure import command
+from avocado_cloud.utils.utils_azure import command
 
 
-#BASEPATH = os.path.abspath(__file__ + "/../../../")
+BASEPATH = os.path.abspath(__file__ + "/../../../")
 
 
 # class D(dict):
@@ -50,6 +50,10 @@ class Azure_vm_utilsTest(Test):
     def _postfix(self):
         from datetime import datetime
         return datetime.strftime(datetime.now(), "%Y%m%d%H%M%S")
+
+    def setUp(self):
+        self.cloud = Setup(self.params, self.name)
+        self.vm = self.cloud.vm  # Access the VM created during setup
 
     def test_selftest_without_imds_symlink_validation(self):
         """
