@@ -76,11 +76,11 @@ class Azure_vm_utilsTest(Test):
                 self.log.info("Self-test completed successfully.")
                 return True
             else:
-                self.log.error("Self-test failed: {ret.stdout}")
+                self.log.error("Self-test failed: {}".format(ret.stdout))
                 return False
         
         except Exception as e:
-            self.log.error("An error occurred: {str(e)}")
+            self.log.error("An error occurred: {}".format(str(e)))
             return False
 
       
