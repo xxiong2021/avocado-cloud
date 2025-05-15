@@ -7,7 +7,7 @@ from avocado import main
 # from avocado_cloud.app import Setup
 # from avocado_cloud.app.azure import AzureAccount
 # from avocado_cloud.app.azure import AzureNIC
-# from avocado_cloud.app.azure import AzurePublicIP
+from avocado_cloud.app.azure import AzurePublicIP
 # from avocado_cloud.app.azure import AzureNicIpConfig
 # from avocado_cloud.app.azure import AzureImage
 from distutils.version import LooseVersion
