@@ -58,7 +58,7 @@ class Azure_vm_utilsTest(Test):
         self.log.info("publicip_name: %s",publicip_name)
         #publicip = AzurePublicIP(self.params,name=publicip_name)
         #self.log.info("publicip: %s",publicip)
-        cmd = ' az network public-ip show   --name {} --resource-group "{}"'.format(publicip_name, self.vm.resource_group)
+        cmd = ' az network public-ip show   --name {} --resource-group "{}"  --query "ipAddress"   --output tsv'.format(publicip_name, self.vm.resource_group)
         ret = command(cmd)
         publicip = ret.stdout
         self.log.info("publicip: %s",publicip)
@@ -72,11 +72,11 @@ class Azure_vm_utilsTest(Test):
             #self.log.info("publicip: %s",publicip)
 
             # Upload the selftest.py to the remote VM
-            upload_command = "scp -i /root/.ssh/id_rsa /root/azure-vm-utils/selftest/selftest.py azureuser@{publicip}:/home/azureuser"
+            upload_command = 'scp -i /root/.ssh/id_rsa /root/azure-vm-utils/selftest/selftest.py azureuser@{}:/home/azureuser'.format(publicip)
             command(upload_command)
             
             # Run the selftest.py script on the VM
-            run_command = "ssh -i ./id_rsa azureuser@{publicip} -- sudo /home/azureuser/selftest.py --skip-imds-validation --skip-symlink-validation > result.txt 2>&1"
+            run_command = 'ssh -i ./id_rsa azureuser@{} -- sudo /home/azureuser/selftest.py --skip-imds-validation --skip-symlink-validation > result.txt 2>&1'.format(publicip)
             command(run_command)
             
             # Get the last line of the result
