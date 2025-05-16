@@ -56,13 +56,12 @@ class Azure_vm_utilsTest(Test):
         self.vm = self.cloud.vm  # Access the VM created during setup
         publicip_name = self.vm.vm_name + "PublicIP"
         self.log.info("publicip_name: %s",publicip_name)
-        publicip = AzurePublicIP(self.params,name=publicip_name)
+        #publicip = AzurePublicIP(self.params,name=publicip_name)
+        #self.log.info("publicip: %s",publicip)
+        cmd = ' az network public-ip show   --name {} --resource-group "{}"'.format(publicip_name, self.resource_group)
+        ret = command(cmd)
+        publicip = ret.stdout
         self.log.info("publicip: %s",publicip)
-        ip = publicip.show
-        ip_list = publicip.list
-        self.log.info("ip: %s",publicip.show)
-        self.log.info("ip_list: %s",publicip.list)
-        publicip = ip
 
     def test_selftest_without_imds_symlink_validation(self):
         """
