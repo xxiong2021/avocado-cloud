@@ -58,7 +58,7 @@ class Azure_vm_utilsTest(Test):
         self.log.info("publicip_name: %s",publicip_name)
         #publicip = AzurePublicIP(self.params,name=publicip_name)
         #self.log.info("publicip: %s",publicip)
-        cmd = ' az network public-ip show   --name {} --resource-group "{}"'.format(publicip_name, self.resource_group)
+        cmd = ' az network public-ip show   --name {} --resource-group "{}"'.format(publicip_name, self.vm.resource_group)
         ret = command(cmd)
         publicip = ret.stdout
         self.log.info("publicip: %s",publicip)
