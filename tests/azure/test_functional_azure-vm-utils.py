@@ -58,8 +58,10 @@ class Azure_vm_utilsTest(Test):
         self.log.info("publicip_name: %s",publicip_name)
         publicip = AzurePublicIP(self.params,name=publicip_name)
         self.log.info("publicip: %s",publicip)
-        ip=publicip.ip
-        self.log.info("ip: %s",publicip.ip)
+        ip = publicip.show
+        ip_list = publicip.list
+        self.log.info("ip: %s",publicip.show)
+        self.log.info("ip_list: %s",publicip.list)
 
     def test_selftest_without_imds_symlink_validation(self):
         """
