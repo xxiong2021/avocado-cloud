@@ -54,14 +54,16 @@ class Azure_vm_utilsTest(Test):
     def setUp(self):
         self.cloud = Setup(self.params, self.name)
         self.vm = self.cloud.vm  # Access the VM created during setup
+        publicip = AzurePublicIP(self.params, name=self.vm.vm_name)
+        self.log.info("publicip: %s",publicip)
 
     def test_selftest_without_imds_symlink_validation(self):
         """
         :avocado: tags=tier1,azure_vm_utils
         """
         try:
-            publicip = AzurePublicIP(self.params, name=self.vm.vm_name)
-            self.log.info("publicip: %s",publicip)
+            #publicip = AzurePublicIP(self.params, name=self.vm.vm_name)
+            #self.log.info("publicip: %s",publicip)
 
             # Upload the selftest.py to the remote VM
             upload_command = "scp -i /root/.ssh/id_rsa /root/azure-vm-utils/selftest/selftest.py azureuser@{publicip}:/home/azureuser"
