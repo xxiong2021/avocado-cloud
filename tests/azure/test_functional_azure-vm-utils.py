@@ -45,8 +45,8 @@ class Azure_vm_utilsTest(Test):
         # publicip = AzurePublicIP(self.params, name=publicip_name)
         # if not publicip.exists():
         #     publicip.create()
-        account = AzureAccount(self.params)
-        account.login()
+        # account = AzureAccount(self.params)
+        # account.login()
         # cloud = Setup(self.params, self.name)
         # self.vm = cloud.vm
         # self.session = cloud.init_vm()
