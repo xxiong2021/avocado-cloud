@@ -51,16 +51,17 @@ class Azure_vm_utilsTest(Test):
         # self.vm = cloud.vm
         # self.session = cloud.init_vm()
         # status, output = self.session.cmd_status_output('uname -r')
-        ret = self.vm.create(wait=True)
-        info = json.loads(ret.stdout)
-        public_ip = info["publicIpAddress"]
+        self.vm.create(wait=True)
+        # info = json.loads(ret.stdout)
+        # public_ip = info["publicIpAddress"]
         
         # ret = publicip.show()
         # info = json.loads(ret.stdout)
         # public_ip = info["ipAddress"]
         #public_ip = self.vm.public_ip
-        #cmd = ' az network public-ip show   --name {} --resource-group "{}"  --query "ipAddress"   --output tsv'.format(publicip_name, self.vm.resource_group)
-        
+        cmd = ' az network public-ip show   --name {} --resource-group "{}"  --query "ipAddress"   --output tsv'.format(publicip_name, self.vm.resource_group)
+        ret = command(cmd)
+        public_ip = ret.stdout.strip()
         # try:
         #     ret = command(cmd)
         # except:
