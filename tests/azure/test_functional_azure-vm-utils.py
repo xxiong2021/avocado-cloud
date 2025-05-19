@@ -42,7 +42,9 @@ class Azure_vm_utilsTest(Test):
         self.log.info("publicip_name: %s",publicip_name)
         #publicip = AzurePublicIP(self.params,name=publicip_name)
         #self.log.info("publicip: %s",publicip)
-        publicip = AzurePublicIP(self.params,name=publicip_name)
+        publicip = AzurePublicIP(self.params, name=publicip_name)
+        if not publicip.exists():
+            publicip.create()
         # ret = publicip.show()
         # info = json.loads(ret.stdout)
         # public_ip = info["ipAddress"]
