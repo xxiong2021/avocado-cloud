@@ -52,7 +52,7 @@ class Azure_vm_utilsTest(Test):
         # try:
         #     ret = command(cmd)
         # except:
-        cmd = ' az network public-ip show   --name {} --resource-group "{}" '
+        cmd = ' az network public-ip show   --name {} --resource-group "{}" '.format(publicip_name, self.vm.resource_group)
         ret = command(cmd)
         info = json.loads(ret.stdout)
         public_ip = info["ipAddress"]
