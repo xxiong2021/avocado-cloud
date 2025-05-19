@@ -29,24 +29,7 @@ BASEPATH = os.path.abspath(__file__ + "/../../../")
 
 
 class Azure_vm_utilsTest(Test):
-    # def setUp(self):
-    #     account = AzureAccount(self.params)
-    #     account.login()
-    #     self.project = self.params.get("rhel_ver", "*/VM/*")
-    #     self.case_short_name = re.findall(r"Test.(.*)", self.name.name)[0]
-    #     self.pwd = os.path.abspath(os.path.dirname(__file__))
-        
-    #     # Skip tests based on RHEL version
-    #     if LooseVersion(self.project) < LooseVersion('9.7.0'):
-    #         self.cancel(f"Skip case because RHEL-{self.project} doesn't support this feature")
-    #     if LooseVersion(self.project) < LooseVersion('10.1'):
-    #         self.cancel(f"Skip case because RHEL-{self.project} doesn't support this feature")
-        
-    #     # Initialize public IP and VM details
-    #     publicip = AzurePublicIP(self.params, name=self.vm.vm_name)
-    #     return
 
-    # @property
     def _postfix(self):
         from datetime import datetime
         return datetime.strftime(datetime.now(), "%Y%m%d%H%M%S")
@@ -60,8 +43,11 @@ class Azure_vm_utilsTest(Test):
         #self.log.info("publicip: %s",publicip)
         cmd = ' az network public-ip show   --name {} --resource-group "{}"  --query "ipAddress"   --output tsv'.format(publicip_name, self.vm.resource_group)
         ret = command(cmd)
-        publicip = ret.stdout
-        self.log.info("publicip: %s",publicip)
+        publicip = ret.stdout.strip()
+        if not publicip:
+            raise RuntimeError("Public IP address is empty or not assigned. Check Azure resource state.")
+        self.publicip = publicip
+        self.log.info("publicip: %s", self.publicip)
 
     def test_selftest_without_imds_symlink_validation(self):
         """
@@ -72,11 +58,11 @@ class Azure_vm_utilsTest(Test):
             #self.log.info("publicip: %s",publicip)
 
             # Upload the selftest.py to the remote VM
-            upload_command = 'scp -i /root/.ssh/id_rsa /root/azure-vm-utils/selftest/selftest.py azureuser@{}:/home/azureuser'.format(publicip)
+            upload_command = 'scp -i /root/.ssh/id_rsa /root/azure-vm-utils/selftest/selftest.py azureuser@{}:/home/azureuser'.format(self.publicip)
             command(upload_command)
             
             # Run the selftest.py script on the VM
-            run_command = 'ssh -i ./id_rsa azureuser@{} -- sudo /home/azureuser/selftest.py --skip-imds-validation --skip-symlink-validation > result.txt 2>&1'.format(publicip)
+            run_command = 'ssh -i ./id_rsa azureuser@{} -- sudo /home/azureuser/selftest.py --skip-imds-validation --skip-symlink-validation > result.txt 2>&1'.format(self.publicip)
             command(run_command)
             
             # Get the last line of the result
