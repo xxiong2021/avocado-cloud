@@ -38,7 +38,7 @@ class Azure_vm_utilsTest(Test):
     def setUp(self):
         self.cloud = Setup(self.params, self.name)
         self.vm = self.cloud.vm  # Access the VM created during setup
-        # publicip_name = self.vm.vm_name + "PublicIP"
+        publicip_name = self.vm.vm_name + "PublicIP"
         # self.log.info("publicip_name: %s",publicip_name)
         # #publicip = AzurePublicIP(self.params,name=publicip_name)
         # #self.log.info("publicip: %s",publicip)
