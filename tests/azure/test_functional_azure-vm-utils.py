@@ -41,9 +41,9 @@ class Azure_vm_utilsTest(Test):
         self.log.info("publicip_name: %s",publicip_name)
         #publicip = AzurePublicIP(self.params,name=publicip_name)
         #self.log.info("publicip: %s",publicip)
-        publicip = AzurePublicIP(self.params,name=publicip_name)
-        public_ip = publicip.public_ip
-        
+        #publicip = AzurePublicIP(self.params,name=publicip_name)
+        public_ip = self.vm.public_ip
+        self.log.info("public_ip: %s", public_ip)
         # cmd = ' az network public-ip show   --name {} --resource-group "{}"  --query "ipAddress"   --output tsv'.format(publicip_name, self.vm.resource_group)
         
         # retry_count = int(self.params.get("retry_count", default=5))
