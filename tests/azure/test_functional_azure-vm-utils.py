@@ -41,23 +41,26 @@ class Azure_vm_utilsTest(Test):
         self.log.info("publicip_name: %s",publicip_name)
         #publicip = AzurePublicIP(self.params,name=publicip_name)
         #self.log.info("publicip: %s",publicip)
-        cmd = ' az network public-ip show   --name {} --resource-group "{}"  --query "ipAddress"   --output tsv'.format(publicip_name, self.vm.resource_group)
+        publicip = AzurePublicIP(self.params,name=publicip_name)
+        public_ip = publicip.public_ip
         
-        retry_count = int(self.params.get("retry_count", default=5))
-        delay_seconds = int(self.params.get("delay_seconds", default=5))
+        # cmd = ' az network public-ip show   --name {} --resource-group "{}"  --query "ipAddress"   --output tsv'.format(publicip_name, self.vm.resource_group)
+        
+        # retry_count = int(self.params.get("retry_count", default=5))
+        # delay_seconds = int(self.params.get("delay_seconds", default=5))
 
-        publicip = ""
-        for attempt in range(retry_count):
-            ret = command(cmd)
-            publicip = ret.stdout.strip()
-            if publicip:
-                break
-            self.log.warning("Public IP not yet assigned (attempt %d). Retrying in %d seconds...", attempt + 1, delay_seconds)
-            time.sleep(delay_seconds)
+        # publicip = ""
+        # for attempt in range(retry_count):
+        #     ret = command(cmd)
+        #     publicip = ret.stdout.strip()
+        #     if publicip:
+        #         break
+        #     self.log.warning("Public IP not yet assigned (attempt %d). Retrying in %d seconds...", attempt + 1, delay_seconds)
+        #     time.sleep(delay_seconds)
 
-        if not publicip:
-            raise RuntimeError("Public IP address is empty or not assigned after retries.")
-        self.publicip = publicip
+        # if not publicip:
+        #     raise RuntimeError("Public IP address is empty or not assigned after retries.")
+        self.publicip = public_ip
         self.log.info("publicip: %s", self.publicip)
 
     def test_selftest_without_imds_symlink_validation(self):
