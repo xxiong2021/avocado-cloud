@@ -36,15 +36,25 @@ class Azure_vm_utilsTest(Test):
         return datetime.strftime(datetime.now(), "%Y%m%d%H%M%S")
 
     def setUp(self):
-        self.cloud = Setup(self.params, self.name)
-        self.vm = self.cloud.vm  # Access the VM created during setup
-        publicip_name = self.vm.vm_name + "PublicIP"
-        self.log.info("publicip_name: %s",publicip_name)
-        #publicip = AzurePublicIP(self.params,name=publicip_name)
-        #self.log.info("publicip: %s",publicip)
-        publicip = AzurePublicIP(self.params, name=publicip_name)
-        if not publicip.exists():
-            publicip.create()
+        # self.cloud = Setup(self.params, self.name)
+        # self.vm = self.cloud.vm  # Access the VM created during setup
+        # publicip_name = self.vm.vm_name + "PublicIP"
+        # self.log.info("publicip_name: %s",publicip_name)
+        # #publicip = AzurePublicIP(self.params,name=publicip_name)
+        # #self.log.info("publicip: %s",publicip)
+        # publicip = AzurePublicIP(self.params, name=publicip_name)
+        # if not publicip.exists():
+        #     publicip.create()
+        account = AzureAccount(self.params)
+        account.login()
+        # cloud = Setup(self.params, self.name)
+        # self.vm = cloud.vm
+        # self.session = cloud.init_vm()
+        # status, output = self.session.cmd_status_output('uname -r')
+        ret = self.vm.create(wait=True)
+        info = json.loads(ret.stdout)
+        public_ip = info["publicIpAddress"]
+        
         # ret = publicip.show()
         # info = json.loads(ret.stdout)
         # public_ip = info["ipAddress"]
@@ -54,11 +64,11 @@ class Azure_vm_utilsTest(Test):
         # try:
         #     ret = command(cmd)
         # except:
-        time.sleep(120)
-        cmd = ' az network public-ip show   --name {} --resource-group "{}" '.format(publicip_name, self.vm.resource_group)
-        ret = command(cmd)
-        info = json.loads(ret.stdout)
-        public_ip = info["ipAddress"]
+        # time.sleep(120)
+        # cmd = ' az network public-ip show   --name {} --resource-group "{}" '.format(publicip_name, self.vm.resource_group)
+        # ret = command(cmd)
+        # info = json.loads(ret.stdout)
+        # public_ip = info["ipAddress"]
         self.log.info("public_ip: %s", public_ip)
             
         # retry_count = int(self.params.get("retry_count", default=5))
