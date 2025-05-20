@@ -38,7 +38,7 @@ class Azure_vm_utilsTest(Test):
     def setUp(self):
         self.cloud = Setup(self.params, self.name)
         self.vm = self.cloud.vm  # Access the VM created during setup
-        publicip_name = self.vm.vm_name + "PublicIP"
+        #publicip_name = self.vm.vm_name + "PublicIP"
         # self.log.info("publicip_name: %s",publicip_name)
         # #publicip = AzurePublicIP(self.params,name=publicip_name)
         # #self.log.info("publicip: %s",publicip)
@@ -96,6 +96,7 @@ class Azure_vm_utilsTest(Test):
             if self.vm.exists():
                 self.vm.delete()
             self.vm.create(wait=True)
+            publicip_name = self.vm.vm_name + "PublicIP"
             cmd = ' az network public-ip show   --name {} --resource-group "{}"  --query "ipAddress"   --output tsv'.format(publicip_name, self.vm.resource_group)
             ret = command(cmd)
             public_ip = ret.stdout.strip()
