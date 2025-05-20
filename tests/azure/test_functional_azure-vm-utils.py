@@ -52,7 +52,6 @@ class Azure_vm_utilsTest(Test):
         # self.session = cloud.init_vm()
         # status, output = self.session.cmd_status_output('uname -r')
         authentication = "publickey"
-        self.vm.create(wait=True)
         # info = json.loads(ret.stdout)
         # public_ip = info["publicIpAddress"]
         
@@ -60,9 +59,7 @@ class Azure_vm_utilsTest(Test):
         # info = json.loads(ret.stdout)
         # public_ip = info["ipAddress"]
         #public_ip = self.vm.public_ip
-        cmd = ' az network public-ip show   --name {} --resource-group "{}"  --query "ipAddress"   --output tsv'.format(publicip_name, self.vm.resource_group)
-        ret = command(cmd)
-        public_ip = ret.stdout.strip()
+        
         # try:
         #     ret = command(cmd)
         # except:
@@ -71,7 +68,7 @@ class Azure_vm_utilsTest(Test):
         # ret = command(cmd)
         # info = json.loads(ret.stdout)
         # public_ip = info["ipAddress"]
-        self.log.info("public_ip: %s", public_ip)
+        
             
         # retry_count = int(self.params.get("retry_count", default=5))
         # delay_seconds = int(self.params.get("delay_seconds", default=5))
@@ -87,8 +84,7 @@ class Azure_vm_utilsTest(Test):
 
         # if not publicip:
         #     raise RuntimeError("Public IP address is empty or not assigned after retries.")
-        self.publicip = public_ip
-        self.log.info("publicip: %s", self.publicip)
+
 
     def test_selftest_without_imds_symlink_validation(self):
         """
@@ -97,25 +93,35 @@ class Azure_vm_utilsTest(Test):
         try:
             #publicip = AzurePublicIP(self.params, name=self.vm.vm_name)
             #self.log.info("publicip: %s",publicip)
+            if self.vm.exists():
+                self.vm.delete()
+            self.vm.create(wait=True)
+            cmd = ' az network public-ip show   --name {} --resource-group "{}"  --query "ipAddress"   --output tsv'.format(publicip_name, self.vm.resource_group)
+            ret = command(cmd)
+            public_ip = ret.stdout.strip()
+            self.log.info("public_ip: %s", public_ip)
 
             # Upload the selftest.py to the remote VM
-            upload_command = 'scp -i /root/.ssh/id_rsa /root/azure-vm-utils/selftest/selftest.py azureuser@{}:/home/azureuser'.format(self.publicip)
+            upload_command = 'scp -i /root/.ssh/id_rsa /root/azure-vm-utils/selftest/selftest.py azureuser@{}:/home/azureuser'.format(public_ip)
             command(upload_command)
             
             # Run the selftest.py script on the VM
-            run_command = 'ssh -i ./id_rsa azureuser@{} -- sudo /home/azureuser/selftest.py --skip-imds-validation --skip-symlink-validation > result.txt 2>&1'.format(self.publicip)
+            run_command = 'ssh -i ./id_rsa azureuser@{} -- sudo /home/azureuser/selftest.py --skip-imds-validation --skip-symlink-validation > result.txt 2>&1'.format(public_ip)
             command(run_command)
             
             # Get the last line of the result
             result_command = "tail -n 1 /root/azure-vm-utils/result.txt | awk '{print $NF}'"
             ret = command(result_command)
             
+            
             # Check if the result was successful
             if ret.stdout.strip() == "success!":
                 self.log.info("Self-test completed successfully.")
+                self.vm.delete()
                 return True
             else:
                 self.log.error("Self-test failed: {}".format(ret.stdout))
+                self.vm.delete()
                 return False
         
         except Exception as e:
