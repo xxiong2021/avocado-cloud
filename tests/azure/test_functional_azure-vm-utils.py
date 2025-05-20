@@ -51,6 +51,7 @@ class Azure_vm_utilsTest(Test):
         # self.vm = cloud.vm
         # self.session = cloud.init_vm()
         # status, output = self.session.cmd_status_output('uname -r')
+        authentication = "publickey"
         self.vm.create(wait=True)
         # info = json.loads(ret.stdout)
         # public_ip = info["publicIpAddress"]
