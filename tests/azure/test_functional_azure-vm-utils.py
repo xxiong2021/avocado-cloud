@@ -38,54 +38,8 @@ class Azure_vm_utilsTest(Test):
     def setUp(self):
         self.cloud = Setup(self.params, self.name)
         self.vm = self.cloud.vm  # Access the VM created during setup
-        #publicip_name = self.vm.vm_name + "PublicIP"
-        # self.log.info("publicip_name: %s",publicip_name)
-        # #publicip = AzurePublicIP(self.params,name=publicip_name)
-        # #self.log.info("publicip: %s",publicip)
-        # publicip = AzurePublicIP(self.params, name=publicip_name)
-        # if not publicip.exists():
-        #     publicip.create()
-        # account = AzureAccount(self.params)
-        # account.login()
-        # cloud = Setup(self.params, self.name)
-        # self.vm = cloud.vm
-        # self.session = cloud.init_vm()
-        # status, output = self.session.cmd_status_output('uname -r')
         authentication = "publickey"
-        # info = json.loads(ret.stdout)
-        # public_ip = info["publicIpAddress"]
         
-        # ret = publicip.show()
-        # info = json.loads(ret.stdout)
-        # public_ip = info["ipAddress"]
-        #public_ip = self.vm.public_ip
-        
-        # try:
-        #     ret = command(cmd)
-        # except:
-        # time.sleep(120)
-        # cmd = ' az network public-ip show   --name {} --resource-group "{}" '.format(publicip_name, self.vm.resource_group)
-        # ret = command(cmd)
-        # info = json.loads(ret.stdout)
-        # public_ip = info["ipAddress"]
-        
-            
-        # retry_count = int(self.params.get("retry_count", default=5))
-        # delay_seconds = int(self.params.get("delay_seconds", default=5))
-
-        # publicip = ""
-        # for attempt in range(retry_count):
-        #     ret = command(cmd)
-        #     publicip = ret.stdout.strip()
-        #     if publicip:
-        #         break
-        #     self.log.warning("Public IP not yet assigned (attempt %d). Retrying in %d seconds...", attempt + 1, delay_seconds)
-        #     time.sleep(delay_seconds)
-
-        # if not publicip:
-        #     raise RuntimeError("Public IP address is empty or not assigned after retries.")
-
-
     def test_selftest_without_imds_symlink_validation(self):
         """
         :avocado: tags=tier1,azure_vm_utils
@@ -95,6 +49,8 @@ class Azure_vm_utilsTest(Test):
             #self.log.info("publicip: %s",publicip)
             if self.vm.exists():
                 self.vm.delete()
+            key = "/root/.ssh/id_rsa.pub"
+            self.vm.ssh_key_value = "{}".format(key)
             self.vm.create(wait=True)
             publicip_name = self.vm.vm_name + "PublicIP"
             cmd = ' az network public-ip show   --name {} --resource-group "{}"  --query "ipAddress"   --output tsv'.format(publicip_name, self.vm.resource_group)
@@ -113,8 +69,7 @@ class Azure_vm_utilsTest(Test):
             # Get the last line of the result
             result_command = "tail -n 1 /root/azure-vm-utils/result.txt | awk '{print $NF}'"
             ret = command(result_command)
-            
-            
+
             # Check if the result was successful
             if ret.stdout.strip() == "success!":
                 self.log.info("Self-test completed successfully.")
@@ -128,5 +83,10 @@ class Azure_vm_utilsTest(Test):
         except Exception as e:
             self.log.error("An error occurred: {}".format(str(e)))
             return False
+    
+    def tearDown(self):
+        self.vm.delete()
 
+if __name__ == "__main__":
+    main()
       
