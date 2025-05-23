@@ -104,6 +104,7 @@ class Azure_vm_utilsTest(Test):
             key = "/root/.ssh/id_rsa.pub"
             self.vm.ssh_key_value = "{}".format(key)
             self.vm.authentication_type = "ssh"
+            self.vm.name += "-utils"
             self.vm.create(wait=True)
             self.session.connect(authentication="publickey")
             self.assertEqual(self.vm.vm_username,
@@ -147,3 +148,6 @@ class Azure_vm_utilsTest(Test):
         except Exception as e:
             self.log.error("An error occurred: {}".format(str(e)))
             return False
+
+    def tearDown(self):
+        self.vm.delete()
