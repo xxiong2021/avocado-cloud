@@ -151,3 +151,6 @@ class Azure_vm_utilsTest(Test):
 
     def tearDown(self):
         self.vm.delete()
+
+if __name__ == "__main__":
+    main()
