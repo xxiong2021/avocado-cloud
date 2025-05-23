@@ -149,8 +149,8 @@ class Azure_vm_utilsTest(Test):
             self.log.error("An error occurred: {}".format(str(e)))
             return False
 
-    def tearDown(self):
-        self.vm.delete()
+#     def tearDown(self):
+#         self.vm.delete()
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
