@@ -95,13 +95,13 @@ class Azure_vm_utilsTest(Test):
             #self.log.info("publicip: %s",publicip)
             if self.vm.exists():
                 self.vm.delete()
+            file_path = '/root/azure-vm-utils/result.txt'
+            if os.path.exists(file_path):
+                os.remove(file_path)
+    
             key = "/root/.ssh/id_rsa.pub"
             self.vm.ssh_key_value = "{}".format(key)
-            res_vm = self.vm.create(wait=True)
-            
-            info = json.loads(res_vm.stdout)
-            info_public_ip = info["publicIpAddress"]
-            self.log.info("info_public_ip: %s", info_public_ip)
+            self.vm.create(wait=True)
             
             publicip_name = self.vm.vm_name + "PublicIP"
             cmd = ' az network public-ip show   --name {} --resource-group "{}"  --query "ipAddress"   --output tsv'.format(publicip_name, self.vm.resource_group)
