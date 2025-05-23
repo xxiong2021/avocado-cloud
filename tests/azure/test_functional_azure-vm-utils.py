@@ -101,7 +101,17 @@ class Azure_vm_utilsTest(Test):
     
             key = "/root/.ssh/id_rsa.pub"
             self.vm.ssh_key_value = "{}".format(key)
+            self.vm.authentication_type = "ssh"
             self.vm.create(wait=True)
+            self.session.connect(authentication="publickey")
+            self.assertEqual(self.vm.vm_username,
+                             self.session.cmd_output("whoami"),
+                             "Fail to login with publickey")
+            self.assertIn(
+                "%s ALL=(ALL) NOPASSWD:ALL" % self.vm.vm_username,
+                self.session.cmd_output(
+                    "sudo cat /etc/sudoers.d/90-cloud-init-users"),
+                "No sudo privilege")
             
             publicip_name = self.vm.vm_name + "PublicIP"
             cmd = ' az network public-ip show   --name {} --resource-group "{}"  --query "ipAddress"   --output tsv'.format(publicip_name, self.vm.resource_group)
