@@ -97,7 +97,12 @@ class Azure_vm_utilsTest(Test):
                 self.vm.delete()
             key = "/root/.ssh/id_rsa.pub"
             self.vm.ssh_key_value = "{}".format(key)
-            self.vm.create(wait=True)
+            res_vm = self.vm.create(wait=True)
+            
+            info = json.loads(res_vm.stdout)
+            info_public_ip = info["publicIpAddress"]
+            self.log.info("info_public_ip: %s", info_public_ip)
+            
             publicip_name = self.vm.vm_name + "PublicIP"
             cmd = ' az network public-ip show   --name {} --resource-group "{}"  --query "ipAddress"   --output tsv'.format(publicip_name, self.vm.resource_group)
             ret = command(cmd)
