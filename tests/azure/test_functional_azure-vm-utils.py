@@ -95,8 +95,8 @@ class Azure_vm_utilsTest(Test):
         try:
             #publicip = AzurePublicIP(self.params, name=self.vm.vm_name)
             #self.log.info("publicip: %s",publicip)
-            if self.vm.exists():
-                self.vm.delete()
+            # if self.vm.exists():
+            #     self.vm.delete()
             file_path = '/root/azure-vm-utils/result.txt'
             if os.path.exists(file_path):
                 os.remove(file_path)
@@ -105,7 +105,14 @@ class Azure_vm_utilsTest(Test):
             self.vm.ssh_key_value = "{}".format(key)
             self.vm.authentication_type = "ssh"
             self.vm.vm_name += "-utils"
+            # self.vm.os_disk_name += "-new"
+
+            osdisk = self.vm.properties["storageProfile"]["osDisk"]["vhd"]["uri"]
+            self.vm.delete()
+            self.vm.image = osdisk
+            #self.vm.vm_username = origin_username
             self.vm.os_disk_name += "-new"
+
             self.vm.create(wait=True)
             self.session.connect(authentication="publickey")
             self.assertEqual(self.vm.vm_username,
