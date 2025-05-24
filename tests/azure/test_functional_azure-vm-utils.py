@@ -36,6 +36,7 @@ class Azure_vm_utilsTest(Test):
         return datetime.strftime(datetime.now(), "%Y%m%d%H%M%S")
 
     def setUp(self):
+        #self.casestatus = False
         self.cloud = Setup(self.params, self.name)
         self.vm = self.cloud.vm  # Access the VM created during setup
         authentication = "publickey"
@@ -135,7 +136,7 @@ class Azure_vm_utilsTest(Test):
             command(upload_command)
             
             # Run the selftest.py script on the VM
-            run_command = 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ./id_rsa azureuser@{} -- sudo /home/azureuser/selftest.py --skip-imds-validation --skip-symlink-validation > result.txt 2>&1'.format(public_ip)
+            run_command = 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ./id_rsa azureuser@{} -- sudo /home/azureuser/selftest.py --skip-imds-validation --skip-symlink-validation > /root/azure-vm-utils/result.txt 2>&1'.format(public_ip)
             command(run_command)
             
             # Get the last line of the result
@@ -147,6 +148,7 @@ class Azure_vm_utilsTest(Test):
             if ret.stdout.strip() == "success!":
                 self.log.info("Self-test completed successfully.")
                 self.vm.delete()
+                #self.casestatus = True
                 return True
             else:
                 self.log.error("Self-test failed: {}".format(ret.stdout))
