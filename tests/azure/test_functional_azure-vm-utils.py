@@ -105,6 +105,7 @@ class Azure_vm_utilsTest(Test):
             self.vm.ssh_key_value = "{}".format(key)
             self.vm.authentication_type = "ssh"
             self.vm.vm_name += "-utils"
+            self.vm.os_disk_name += "-new"
             self.vm.create(wait=True)
             self.session.connect(authentication="publickey")
             self.assertEqual(self.vm.vm_username,
@@ -150,7 +151,7 @@ class Azure_vm_utilsTest(Test):
             return False
 
 #     def tearDown(self):
-#         self.vm.delete()
+#         self.vm.delete(wait=False)
 
 # if __name__ == "__main__":
 #     main()
