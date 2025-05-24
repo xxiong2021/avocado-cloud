@@ -131,11 +131,11 @@ class Azure_vm_utilsTest(Test):
             self.log.info("public_ip: %s", public_ip)
 
             # Upload the selftest.py to the remote VM
-            upload_command = 'scp -i /root/.ssh/id_rsa /root/azure-vm-utils/selftest/selftest.py azureuser@{}:/home/azureuser'.format(public_ip)
+            upload_command = 'scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /root/.ssh/id_rsa /root/azure-vm-utils/selftest/selftest.py azureuser@{}:/home/azureuser'.format(public_ip)
             command(upload_command)
             
             # Run the selftest.py script on the VM
-            run_command = 'ssh -i ./id_rsa azureuser@{} -- sudo /home/azureuser/selftest.py --skip-imds-validation --skip-symlink-validation > result.txt 2>&1'.format(public_ip)
+            run_command = 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ./id_rsa azureuser@{} -- sudo /home/azureuser/selftest.py --skip-imds-validation --skip-symlink-validation > result.txt 2>&1'.format(public_ip)
             command(run_command)
             
             # Get the last line of the result
