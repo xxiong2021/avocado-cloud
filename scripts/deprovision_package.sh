@@ -56,7 +56,8 @@ function deprovision_wala() {
 }
 
 function deprovision_azure_vm_utils() {
-    #rpm -e azure-vm-utils > /dev/null 2>&1    
+    #rpm -e azure-vm-utils > /dev/null 2>&1 
+    return 1
 }
 
 function deprovision_cloudinit_wala() {
