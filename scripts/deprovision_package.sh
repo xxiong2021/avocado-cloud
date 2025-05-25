@@ -56,7 +56,7 @@ function deprovision_wala() {
 }
 
 function deprovision_azure_vm_utils() {
-    rpm -e azure-vm-utils > /dev/null 2>&1    
+    #rpm -e azure-vm-utils > /dev/null 2>&1    
 }
 
 function deprovision_cloudinit_wala() {
@@ -510,15 +510,16 @@ function verify_cloudinit() {
 }
 
 function verify_azure_vm_utils() {
-    rpm -q azure-vm-utils > /dev/null
-    if [ $? -eq 0 ];then
-        format_echo "Verify azure-vm-utils removed: FAIL";
-        ret=1
-    else
-        format_echo "Verify azure-vm-utils removed: PASS"
-        ret=0
-    fi
-    return $ret
+    # rpm -q azure-vm-utils > /dev/null
+    # if [ $? -eq 0 ];then
+    #     format_echo "Verify azure-vm-utils removed: FAIL";
+    #     ret=1
+    # else
+    #     format_echo "Verify azure-vm-utils removed: PASS"
+    #     ret=0
+    # fi
+    # return $ret
+    return 0
 }
 
 case $type in
