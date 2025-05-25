@@ -135,12 +135,12 @@ class Azure_vm_utilsTest(Test):
             upload_command = 'scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /root/.ssh/id_rsa /root/azure-vm-utils/selftest/selftest.py azureuser@{}:/home/azureuser'.format(public_ip)
             command(upload_command)
 
-            check_command = 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ./id_rsa azureuser@{} -- ls /home/azureuser/selftest.py;ls /home/azureuser;rpm -qa azure-vm-utils* '.format(public_ip)
+            check_command = 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /root/.ssh/id_rsa azureuser@{} -- ls /home/azureuser/selftest.py;ls /home/azureuser;rpm -qa azure-vm-utils* '.format(public_ip)
             check_res = command(check_command)
             self.log.info("check_result: %s", check_res)
             
             # Run the selftest.py script on the VM
-            run_command = 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ./id_rsa azureuser@{} -- sudo /home/azureuser/selftest.py --skip-imds-validation --skip-symlink-validation > /root/azure-vm-utils/result.txt 2>&1'.format(public_ip)
+            run_command = 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /root/.ssh/id_rsa azureuser@{} -- sudo /home/azureuser/selftest.py --skip-imds-validation --skip-symlink-validation > /root/azure-vm-utils/result.txt 2>&1'.format(public_ip)
             command(run_command)
             
             # Get the last line of the result
