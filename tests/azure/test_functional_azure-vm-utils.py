@@ -47,6 +47,7 @@ class Azure_vm_utilsTest(Test):
         #self.vm.delete()
         #self.vm.image = osdisk
         # self.vm.os_disk_name += "-new"
+        self.vm.subnet += "-new"
 
         # self.vm.create(wait=True)
         self.session.connect(authentication="publickey")
