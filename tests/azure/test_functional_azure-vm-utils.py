@@ -46,10 +46,12 @@ class Azure_vm_utilsTest(Test):
         #osdisk = self.vm.properties["storageProfile"]["osDisk"]["vhd"]["uri"]
         #self.vm.delete()
         #self.vm.image = osdisk
-        # self.vm.os_disk_name += "-new"
-        # self.vm.subnet += "-utils"
+        
+        self.publicip_name = self.vm.vm_name + "PublicIP"
+        self.vm.os_disk_name += "-utils"
+        self.vm.subnet += "-utils"
 
-        # self.vm.create(wait=True)
+        self.vm.create(wait=True)
         self.session.connect(authentication="publickey")
         self.assertEqual(self.vm.vm_username,
                          self.session.cmd_output("whoami"),
@@ -70,7 +72,8 @@ class Azure_vm_utilsTest(Test):
         :avocado: tags=tier1,azure_vm_utils
         """
         try:   
-            publicip_name = self.vm.vm_name + "PublicIP"
+            #publicip_name = self.vm.vm_name + "PublicIP"
+            publicip_name = self.publicip_name
             cmd = ' az network public-ip show   --name {} --resource-group "{}"  --query "ipAddress"   --output tsv'.format(publicip_name, self.vm.resource_group)
             ret = command(cmd)
             public_ip = ret.stdout.strip()
