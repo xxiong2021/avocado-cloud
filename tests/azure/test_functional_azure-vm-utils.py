@@ -40,14 +40,14 @@ class Azure_vm_utilsTest(Test):
         key = "/root/.ssh/id_rsa.pub"
         self.vm.ssh_key_value = "{}".format(key)
         self.vm.authentication_type = "ssh"
-        self.vm.vm_name += "-utils"
+        #self.vm.vm_name += "-utils"
         # self.vm.os_disk_name += "-new"
 
         #osdisk = self.vm.properties["storageProfile"]["osDisk"]["vhd"]["uri"]
         #self.vm.delete()
         #self.vm.image = osdisk
         # self.vm.os_disk_name += "-new"
-        self.vm.subnet += "-new"
+        self.vm.subnet += "-utils"
 
         # self.vm.create(wait=True)
         self.session.connect(authentication="publickey")
