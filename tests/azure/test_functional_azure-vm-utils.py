@@ -95,12 +95,12 @@ class Azure_vm_utilsTest(Test):
             # Check if the result was successful
             if ret.stdout.strip() == "success!":
                 self.log.info("Self-test completed successfully.")
-                self.vm.delete(wait=False)
+                #self.vm.delete(wait=False)
                 #self.casestatus = True
                 return True
             else:
                 self.log.error("Self-test failed: {}".format(ret.stdout))
-                self.vm.delete()
+                #self.vm.delete()
                 return False
         
         except Exception as e:
@@ -109,9 +109,8 @@ class Azure_vm_utilsTest(Test):
 
     def tearDown(self):
         self.vm.delete(wait=True)
-        os_disk_name = self.vm.os_disk_name
-        command("az disk delete --name {os_disk_name} --resource-group {self.vm.resource_group} --yes")
-
+        del_cmd = ' az disk delete --name {} --resource-group "{}" --yes '.format(self.vm.os_disk_name, self.vm.resource_group)
+        command(del_cmd)
 
 # if __name__ == "__main__":
 #     main()
