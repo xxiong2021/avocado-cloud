@@ -43,11 +43,10 @@ class Azure_vm_utilsTest(Test):
         self.vm.vm_name += "-utils"
         # self.vm.os_disk_name += "-new"
 
-        osdisk = self.vm.properties["storageProfile"]["osDisk"]["vhd"]["uri"]
-        self.vm.delete()
-        self.vm.image = osdisk
-        #self.vm.vm_username = origin_username
-        self.vm.os_disk_name += "-new"
+        #osdisk = self.vm.properties["storageProfile"]["osDisk"]["vhd"]["uri"]
+        #self.vm.delete()
+        #self.vm.image = osdisk
+        #self.vm.os_disk_name += "-new"
 
         self.vm.create(wait=True)
         self.session.connect(authentication="publickey")
@@ -59,16 +58,17 @@ class Azure_vm_utilsTest(Test):
             self.session.cmd_output(
                 "sudo cat /etc/sudoers.d/90-cloud-init-users"),
             "No sudo privilege")
-
+        
+    @property
+    def _postfix(self):
+        from datetime import datetime
+        return datetime.strftime(datetime.now(), "%Y%m%d%H%M%S")
+        
     def test_selftest_without_imds_symlink_validation(self):
         """
         :avocado: tags=tier1,azure_vm_utils
         """
-        try:
-            #publicip = AzurePublicIP(self.params, name=self.vm.vm_name)
-            #self.log.info("publicip: %s",publicip)
-           
-            
+        try:   
             publicip_name = self.vm.vm_name + "PublicIP"
             cmd = ' az network public-ip show   --name {} --resource-group "{}"  --query "ipAddress"   --output tsv'.format(publicip_name, self.vm.resource_group)
             ret = command(cmd)
