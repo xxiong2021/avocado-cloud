@@ -46,7 +46,7 @@ class Azure_vm_utilsTest(Test):
         #osdisk = self.vm.properties["storageProfile"]["osDisk"]["vhd"]["uri"]
         #self.vm.delete()
         #self.vm.image = osdisk
-        #self.vm.os_disk_name += "-new"
+        self.vm.os_disk_name += "-new"
 
         self.vm.create(wait=True)
         self.session.connect(authentication="publickey")
