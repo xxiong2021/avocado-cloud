@@ -46,9 +46,9 @@ class Azure_vm_utilsTest(Test):
         #osdisk = self.vm.properties["storageProfile"]["osDisk"]["vhd"]["uri"]
         #self.vm.delete()
         #self.vm.image = osdisk
-        self.vm.os_disk_name += "-new"
+        # self.vm.os_disk_name += "-new"
 
-        self.vm.create(wait=True)
+        # self.vm.create(wait=True)
         self.session.connect(authentication="publickey")
         self.assertEqual(self.vm.vm_username,
                          self.session.cmd_output("whoami"),
@@ -108,7 +108,10 @@ class Azure_vm_utilsTest(Test):
             return False
 
     def tearDown(self):
-        self.vm.delete(wait=False)
+        self.vm.delete(wait=True)
+        os_disk_name = self.vm.os_disk_name
+        command("az disk delete --name {os_disk_name} --resource-group {self.vm.resource_group} --yes")
+
 
 # if __name__ == "__main__":
 #     main()
