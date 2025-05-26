@@ -31,8 +31,8 @@ class Azure_vm_utilsTest(Test):
         self.vm = self.cloud.vm  # Access the VM created during setup
         authentication = "publickey"
         self.session = self.cloud.init_vm(authentication=authentication)
-        # if self.vm.exists():
-        #     self.vm.delete()
+        if self.vm.exists():
+            self.vm.delete(wait=True)
         file_path = '/root/azure-vm-utils/result.txt'
         if os.path.exists(file_path):
             os.remove(file_path)
@@ -47,7 +47,7 @@ class Azure_vm_utilsTest(Test):
         #self.vm.delete()
         #self.vm.image = osdisk
         # self.vm.os_disk_name += "-new"
-        self.vm.subnet += "-utils"
+        # self.vm.subnet += "-utils"
 
         # self.vm.create(wait=True)
         self.session.connect(authentication="publickey")
