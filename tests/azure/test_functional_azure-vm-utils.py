@@ -31,8 +31,8 @@ class Azure_vm_utilsTest(Test):
         self.vm = self.cloud.vm  # Access the VM created during setup
         authentication = "publickey"
         self.session = self.cloud.init_vm(authentication=authentication)
-        # if self.vm.exists():
-        #     self.vm.delete(wait=True)
+        if self.vm.exists():
+            self.vm.delete(wait=True)
         file_path = '/root/azure-vm-utils/result.txt'
         if os.path.exists(file_path):
             os.remove(file_path)
@@ -48,8 +48,8 @@ class Azure_vm_utilsTest(Test):
         #self.vm.image = osdisk
         
         self.publicip_name = self.vm.vm_name + "PublicIP"
-        self.vm.os_disk_name += "-utils"
-        self.vm.subnet += "-utils"
+        # self.vm.os_disk_name += "-utils"
+        # self.vm.subnet += "-utils"
 
         self.vm.create(wait=True)
         self.session.connect(authentication="publickey")
@@ -99,12 +99,12 @@ class Azure_vm_utilsTest(Test):
             # Check if the result was successful
             if ret.stdout.strip() == "success!":
                 self.log.info("Self-test completed successfully.")
-                #self.vm.delete(wait=False)
+                self.vm.delete(wait=False)
                 #self.casestatus = True
                 return True
             else:
                 self.log.error("Self-test failed: {}".format(ret.stdout))
-                #self.vm.delete()
+                self.vm.delete(wait=False)
                 return False
         
         except Exception as e:
@@ -112,9 +112,9 @@ class Azure_vm_utilsTest(Test):
             return False
 
     def tearDown(self):
-        self.vm.delete(wait=True)
-        del_cmd = ' az disk delete --name {} --resource-group "{}" --yes '.format(self.vm.os_disk_name, self.vm.resource_group)
-        command(del_cmd)
+        self.vm.delete(wait=False)
+        # del_cmd = ' az disk delete --name {} --resource-group "{}" --yes '.format(self.vm.os_disk_name, self.vm.resource_group)
+        # command(del_cmd)
 
 # if __name__ == "__main__":
 #     main()
