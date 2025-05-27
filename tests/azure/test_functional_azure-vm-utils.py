@@ -40,16 +40,16 @@ class Azure_vm_utilsTest(Test):
         key = "/root/.ssh/id_rsa.pub"
         self.vm.ssh_key_value = "{}".format(key)
         self.vm.authentication_type = "ssh"
-        #self.vm.vm_name += "-utils"
-        self.vm.os_disk_name += "-new"
 
         osdisk = self.vm.properties["storageProfile"]["osDisk"]["vhd"]["uri"]
         #self.vm.delete()
         self.vm.image = osdisk
         
         self.publicip_name = self.vm.vm_name + "PublicIP"
+        self.vm.vm_name += "-utils"
         self.vm.os_disk_name += "-utils"
         self.vm.subnet += "-utils"
+        self.vm.vnet_name += "-utils"
 
         self.vm.create(wait=True)
         self.session.connect(authentication="publickey")
@@ -113,13 +113,13 @@ class Azure_vm_utilsTest(Test):
 
     def tearDown(self):
         if self.vm.exists():
-            self.vm.delete(wait=True)
-        # del_cmd = ' az disk delete --name {} --resource-group "{}" --yes '.format(self.vm.os_disk_name, self.vm.resource_group)
-        # command(del_cmd)
-        # Delete associated subnet if no longer in use
+            self.vm.delete(wait=False)
+        # # del_cmd = ' az disk delete --name {} --resource-group "{}" --yes '.format(self.vm.os_disk_name, self.vm.resource_group)
+        # # command(del_cmd)
+        # # Delete associated subnet if no longer in use
 
-        del_cmd = ' az network vnet subnet delete --name {} --vnet-name {} --resource-group "{}" '.format(self.vm.subnet, self.vm.vnet_name, self.vm.resource_group)
-        self.log.info("Deleted subnet {}".format(self.vm.subnet))
+        # del_cmd = ' az network vnet subnet delete --name {} --vnet-name {} --resource-group "{}" '.format(self.vm.subnet, self.vm.vnet_name, self.vm.resource_group)
+        # self.log.info("Deleted subnet {}".format(self.vm.subnet))
 
 
 # if __name__ == "__main__":
