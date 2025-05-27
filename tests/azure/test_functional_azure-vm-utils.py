@@ -112,9 +112,15 @@ class Azure_vm_utilsTest(Test):
             return False
 
     def tearDown(self):
-        self.vm.delete(wait=False)
+        if self.vm.exists():
+            self.vm.delete(wait=True)
         # del_cmd = ' az disk delete --name {} --resource-group "{}" --yes '.format(self.vm.os_disk_name, self.vm.resource_group)
         # command(del_cmd)
+        # Delete associated subnet if no longer in use
+
+        del_cmd = ' az network vnet subnet delete --name {} --vnet-name {} --resource-group "{}" '.format(self.vm.subnet, self.vm.vnet, self.vm.resource_group)
+        self.log.info("Deleted subnet {}".format(self.vm.subnet))
+
 
 # if __name__ == "__main__":
 #     main()
