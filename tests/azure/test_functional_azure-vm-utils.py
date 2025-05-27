@@ -118,7 +118,7 @@ class Azure_vm_utilsTest(Test):
         # command(del_cmd)
         # Delete associated subnet if no longer in use
 
-        del_cmd = ' az network vnet subnet delete --name {} --vnet-name {} --resource-group "{}" '.format(self.vm.subnet, self.vm.vnet, self.vm.resource_group)
+        del_cmd = ' az network vnet subnet delete --name {} --vnet-name {} --resource-group "{}" '.format(self.vm.subnet, self.vm.vnet_name, self.vm.resource_group)
         self.log.info("Deleted subnet {}".format(self.vm.subnet))
 
 
