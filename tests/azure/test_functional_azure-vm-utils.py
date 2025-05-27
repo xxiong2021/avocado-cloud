@@ -48,7 +48,7 @@ class Azure_vm_utilsTest(Test):
         #self.vm.image = osdisk
         
         self.publicip_name = self.vm.vm_name + "PublicIP"
-        # self.vm.os_disk_name += "-utils"
+        self.vm.os_disk_name += "-utils"
         # self.vm.subnet += "-utils"
 
         self.vm.create(wait=True)
